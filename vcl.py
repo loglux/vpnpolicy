@@ -14,7 +14,7 @@ import pydig
 import csv
 import os
 
-local_ip="192.168.10.0/24"
+local_ip="0.0.0.0"
 
 lines = filter(None, open("./domains.txt", "r").read().splitlines())
 vpn_list = []
@@ -39,6 +39,9 @@ except FileNotFoundError:
 
 if static_lines:
     vpn_list = vpn_list + static_lines
+"""
+TODO: a menu in the console for choosing vpn client (1-5)
+"""
 vpn_list = "nvram set vpn_client1_clientlist=" + '"' + vpn_list + '"'
 
 print(vpn_list)
@@ -78,7 +81,7 @@ os.system("nvram unset vpn_client1_clientlist5")
 #os.system("nvram unset vpn_client3_clientlist2")
 #os.system("nvram unset vpn_client3_clientlist3")
 #os.system("nvram unset vpn_client3_clientlist4")
-#os.system("nvram unset vpn_client31_clientlist5")
+#os.system("nvram unset vpn_client3_clientlist5")
 
 #os.system("nvram unset vpn_client4_clientlist")
 #os.system("nvram unset vpn_client4_clientlist1")
