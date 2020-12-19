@@ -60,6 +60,14 @@ class VPN_Rules():
         print(self.vpn_list)
         #os.system(self.vpn_list)
 
+    def nvram_commit(self):
+        os.system("nvram commit")
+
+    def client_restart(self, clnum=1):
+        service_restart = "service restart_client" + str(clnum)
+        print(service_restart)
+        #os.system(service_restart)
+
 if __name__ == '__main__':
     local = "192.168.10.0/24"
     rules = VPN_Rules()
@@ -69,60 +77,5 @@ if __name__ == '__main__':
     rules.unset_nvram()
     rules.unset_nvram(2)
     rules.set_nvram()
-
-
-
-"""
-os.system("nvram unset vpn_client_clientlist")
-os.system("nvram unset vpn_client_clientlist1")
-os.system("nvram unset vpn_client_clientlist2")
-os.system("nvram unset vpn_client_clientlist3")
-os.system("nvram unset vpn_client_clientlist4")
-os.system("nvram unset vpn_client_clientlist5")
-
-
-os.system("nvram unset vpn_client1_clientlist")
-os.system("nvram unset vpn_client1_clientlist1")
-os.system("nvram unset vpn_client1_clientlist2")
-os.system("nvram unset vpn_client1_clientlist3")
-os.system("nvram unset vpn_client1_clientlist4")
-os.system("nvram unset vpn_client1_clientlist5")
-
-#################
-
-#os.system("nvram unset vpn_client2_clientlist")
-#os.system("nvram unset vpn_client2_clientlist1")
-#os.system("nvram unset vpn_client2_clientlist2")
-#os.system("nvram unset vpn_client2_clientlist3")
-#os.system("nvram unset vpn_client2_clientlist4")
-#os.system("nvram unset vpn_client2_clientlist5")
-
-
-#os.system("nvram unset vpn_client3_clientlist")
-#os.system("nvram unset vpn_client3_clientlist1")
-#os.system("nvram unset vpn_client3_clientlist2")
-#os.system("nvram unset vpn_client3_clientlist3")
-#os.system("nvram unset vpn_client3_clientlist4")
-#os.system("nvram unset vpn_client3_clientlist5")
-
-#os.system("nvram unset vpn_client4_clientlist")
-#os.system("nvram unset vpn_client4_clientlist1")
-#os.system("nvram unset vpn_client4_clientlist2")
-#os.system("nvram unset vpn_client4_clientlist3")
-#os.system("nvram unset vpn_client4_clientlist4")
-#os.system("nvram unset vpn_client4_clientlist5")
-
-
-#os.system("nvram unset vpn_client5_clientlist")
-#os.system("nvram unset vpn_client5_clientlist1")
-#os.system("nvram unset vpn_client5_clientlist2")
-#os.system("nvram unset vpn_client5_clientlist3")
-#os.system("nvram unset vpn_client5_clientlist4")
-#os.system("nvram unset vpn_client5_clientlist5")
-
-########################
-
-os.system(vpn_list)
-#os.system("nvram commit")
-#os.system("service restart_vpnclient2")
-"""
+    #rules.nvram_commit()
+    rules.client_restart(2)
