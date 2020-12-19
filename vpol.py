@@ -69,13 +69,14 @@ class VPN_Rules():
         #os.system(service_restart)
 
 if __name__ == '__main__':
-    local = "192.168.10.0/24"
-    rules = VPN_Rules()
+    local = "0.0.0.0"
+    client = 2
+    rules = VPN_Rules(local)
     rules.domains()
     rules.static()
-    rules.all_rules(2)
+    rules.all_rules(client)
     rules.unset_nvram()
-    rules.unset_nvram(2)
+    rules.unset_nvram(client)
     rules.set_nvram()
     #rules.nvram_commit()
-    rules.client_restart(2)
+    rules.client_restart(client)
