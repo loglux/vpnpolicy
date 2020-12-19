@@ -1,34 +1,21 @@
-"""
-https://www.snbforums.com/threads/low-nvram-despite-factory-defaulting-etc.38573/#post-318633
-vpn_client_clientlist
-This is a temporary variable that gets filled 
-whenever you change settings through the webui. 
-The web server then copies it to the appropriate instance (client1, client2, etc...).
-
-Rules:
-https://github.com/RMerl/asuswrt-merlin.ng/wiki/Policy-based-routing
-https://x3mtek.com/policy-rule-routing-on-asuswrt-merlin-firmware/
-"""
-
 import pydig
 import re
 import csv
 import os
 
 local_ip="0.0.0.0"
-
 pattern = """^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"""
 
-lines = filter(None, open("./domains.txt", "r").read().splitlines())
+lines = filter(None, open("domains.txt", "r").read().splitlines())
 vpn_list = []
 for d in lines:
     results = pydig.query(d, 'A')
+#    results = [item.replace('\r', '') for item in results]
     results = [x for x in results if re.match(pattern, x)]
-    # print(results)
+    #print(results)
     for r in results:
         req = '<' + d[:10] + '>' + local_ip + '>' + r + '>VPN'
         vpn_list.append(req)
-vpn_list = ''.join(vpn_list)
 
 try:
     static_lines = []
@@ -38,14 +25,14 @@ try:
             if len(line) == 4:
                 line = '<' + str(line[0]).strip()[:10] + '>' + str(line[1]).strip() + '>' + str(line[2]).strip() + '>' + str(line[3]).strip().upper()
                 static_lines.append(line)
-    static_lines = ''.join(static_lines)
 except FileNotFoundError:
     pass
 
 if static_lines:
     vpn_list = vpn_list + static_lines
+#print(vpn_list)
+vpn_list = ''.join(vpn_list)
 vpn_list = "nvram set vpn_client1_clientlist=" + '"' + vpn_list + '"'
-
 #print(vpn_list)
 
 os.system("nvram unset vpn_client_clientlist")
