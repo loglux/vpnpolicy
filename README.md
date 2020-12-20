@@ -23,7 +23,7 @@ Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web 
 
 ## Reqiurements
 
-1. You need to install Entwire on your router
+1. You need to install Entware on your router
 
 
 2. You need to install bind-tools or bind-dig on your router
