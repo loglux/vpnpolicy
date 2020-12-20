@@ -25,3 +25,4 @@ Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web 
 ## How to use the script
 lolcal - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 fur your entiere local network.
 client - A number of VPN Client. You have 5 client, so chose the relevanlt number.
+You can comment rules.nvram_commit() if you don't want to save your rules in the router's memory and comment rules.client_restart(client) to prevent VPN client from restarting.
