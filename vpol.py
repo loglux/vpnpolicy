@@ -2,7 +2,6 @@ import pydig
 import re
 import csv
 import os
-import time
 
 class VPN_Rules():
     def __init__(self, local_ip="0.0.0.0"):
@@ -34,11 +33,11 @@ class VPN_Rules():
         except FileNotFoundError:
             pass
 
-    def all_rules(self, seq=1):
+    def all_rules(self):
         if self.static_lines:
             self.vpn_list = self.vpn_list + self.static_lines
         self.vpn_list = ''.join(self.vpn_list)
-        self.vpn_list = "nvram set vpn_client" + str(seq) + "_clientlist=" + '"' + self.vpn_list + '"'
+
 
     def unset_nvram(self, num=''):
         for n in ['', 1, 2, 3, 4, 5]:
@@ -49,7 +48,8 @@ class VPN_Rules():
             print(box)
             os.system(box)
 
-    def set_nvram(self):
+    def set_nvram(self, seq=1):
+        self.vpn_list = "nvram set vpn_client" + str(seq) + "_clientlist=" + '"' + self.vpn_list + '"'
         print(self.vpn_list)
         os.system(self.vpn_list)
 
@@ -70,10 +70,10 @@ if __name__ == '__main__':
     rules = VPN_Rules(local)
     rules.domains(d_conf)
     rules.static(s_conf)
-    rules.all_rules(client)
+    rules.all_rules()
     rules.unset_nvram()
     rules.unset_nvram(client)
-    #time.sleep(2)
-    rules.set_nvram()
+    rules.set_nvram(client)
+    rules.unset_nvram()
     #rules.nvram_commit()
     #rules.client_restart(client)
