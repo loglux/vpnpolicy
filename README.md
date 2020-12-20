@@ -47,18 +47,26 @@ pip install pydig
 ```
 
 ## How to use the script
+
+### Set variables
 local - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
 
 client – a number of a VPN Client you’re using. You have five clients, so chose the relevant number.
 
 You can also put an unique file names and path. 
+    
     conf_path = ""
+    
     d_conf = conf_path + "domains.txt"
+    
     s_conf = conf_path + "static.csv"
     
 
-You can comment out rules.nvram_commit() if you don’t want to save your rules in the router’s memory and comment out in rules.client_restart(client) to prevent VPN client from restarting.
+You can comment out rules.nvram_commit() if you don’t want to save your rules in the router’s memory 
 
+and comment out in rules.client_restart(client) to prevent VPN client from restarting.
+
+### Start
 The main library is stored in file vpol.py
 
 You can create a separate file for each client (client1.py, client2.py etc) if you have more than 1 client set up.
@@ -67,3 +75,23 @@ Execute the script
 ```
 python client1.py
 ```
+
+### If you want start it every time along with VPN client start/restart
+Put a reference to the script into '/jffs/scripts/openvpn-event'. 
+In that case you must comment out rules.client_restart(client) to avoid a loop.
+```
+#rules.client_restart(client)
+```
+Inside of the openvpn-event put a command to start the script:
+```
+#!/bin/sh
+python /path_to_your_script/client1.py
+```
+And don't forget to make the openvpn-event executable
+```
+chmod a+rx /jffs/scripts/openvpn-event
+```
+
+## Useful references:
+https://github.com/RMerl/asuswrt-merlin.ng/wiki/Policy-based-routing
+https://github.com/RMerl/asuswrt-merlin.ng/wiki/User-scripts
