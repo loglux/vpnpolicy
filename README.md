@@ -21,6 +21,28 @@ ADomain,0.0.0.0,194.200.22.87/26,VPN
 Some resources like online cinema theatres have not just more than 1 IP address but also more than one domain.
 Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web History’. Here you can see domains are used by your computer or media player.
 
+## Reqiurements
+1. You need install Entwire on your router
+
+2. You need instal bnd-tools or bnd-dig on your router
+```
+opkg install bind-tools
+```
+
+3. You need install Python
+```
+opkg install python3
+```
+
+4 You need install python3-pip
+```
+opkg install python3-pip
+```
+
+5 You need install pydig module
+```
+pip install pydig
+```
 
 ## How to use the script
 lolcal - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 fur your entiere local network.
@@ -28,3 +50,8 @@ lolcal - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.
 client - A number of VPN Client. You have five clients, so chose the relevant number.
 
 You can comment on rules.nvram_commit() if you don’t want to save your rules in the router’s memory and comment rules.client_restart(client) to prevent VPN client from restarting.
+
+Execute the script 
+```
+python vpol.py
+```
