@@ -92,6 +92,14 @@ And don't forget to make the openvpn-event executable
 chmod a+rx /jffs/scripts/openvpn-event
 ```
 
+## Known limitations
+It's possible to save up 20 rules in one nvram variable.
+This scrpts saves rules into first variable vpn_client_clientlist if possible six.
+It's planned in future to split rules by sets of 20 and save them into 6 nvram variables.
+
+The 'Description' field is limited to ten symbols, to save more space for rules. 
+The script automatically cut all symbols that exceed this ten symbols limit.
+
 ## Useful references:
 https://github.com/RMerl/asuswrt-merlin.ng/wiki/Policy-based-routing
 
