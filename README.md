@@ -76,7 +76,7 @@ Execute the script
 python client1.py
 ```
 
-### If you want start it every time along with VPN client start/restart
+### If you want to start it every time along with VPN client start/restart
 Put a reference to the script into '/jffs/scripts/openvpn-event'. 
 In that case you must comment out rules.client_restart(client) to avoid a loop.
 ```
