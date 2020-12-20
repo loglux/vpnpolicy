@@ -99,7 +99,7 @@ It's planned in future to split rules by sets of 20 and save them into 6 nvram v
 Currently only up to 20 rules per client are possible.
 
 The 'Description' field is limited to ten symbols, to save more space for rules. 
-The script automatically cut off all symbols that exceed this ten symbols limit.
+The script automatically cuts off all symbols that exceed this ten symbols limit.
 
 ## Useful references:
 https://github.com/RMerl/asuswrt-merlin.ng/wiki/Policy-based-routing
