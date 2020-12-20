@@ -2,6 +2,7 @@ import pydig
 import re
 import csv
 import os
+import time
 
 class VPN_Rules():
     def __init__(self, local_ip="0.0.0.0"):
@@ -46,11 +47,11 @@ class VPN_Rules():
             set = "nvram unset "
             box = set + client + list + str(n)
             print(box)
-            #os.system(box)
+            os.system(box)
 
     def set_nvram(self):
         print(self.vpn_list)
-        #os.system(self.vpn_list)
+        os.system(self.vpn_list)
 
     def nvram_commit(self):
         os.system("nvram commit")
@@ -58,7 +59,7 @@ class VPN_Rules():
     def client_restart(self, clnum=1):
         service_restart = "service restart_client" + str(clnum)
         print(service_restart)
-        #os.system(service_restart)
+        os.system(service_restart)
 
 if __name__ == '__main__':
     local = "0.0.0.0" # your local subnet or network node
@@ -72,6 +73,7 @@ if __name__ == '__main__':
     rules.all_rules(client)
     rules.unset_nvram()
     rules.unset_nvram(client)
+    time.sleep(2)
     rules.set_nvram()
     #rules.nvram_commit()
-    rules.client_restart(client)
+    #rules.client_restart(client)
