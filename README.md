@@ -1,7 +1,7 @@
 # vpnpolicy (VPN Policy Rule Routing for AsusWRT Merlin)
 
 ## What that script does?
-This script creates VPN Policy rules for OpenVPN client in AsusWRT Merlin Firmware. VPN client uses that rules to redirect traffic for your device or network based on the destination IP addresses. Instead of pushing all traffic through the VPN, you can redirect it to VPN only if you need to access particular network resources. That gives your incredible flexibility using 
+This script creates VPN Policy rules for OpenVPN client in AsusWRT Merlin Firmware. VPN client uses that rules to redirect traffic for your device or network based on the destination IP addresses. Instead of pushing all traffic through the VPN, you can redirect it to VPN only if you need to access particular network resources. That gives your incredible flexibility using  VPN.
 
 It takes domain names from file domains.txt and obtains IP addresses.
 File domains.txt contains a list of domains
