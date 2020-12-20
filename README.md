@@ -25,6 +25,7 @@ Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web 
 
 1. You need install Entwire on your router
 
+
 2. You need instal bnd-tools or bnd-dig on your router
 ```
 opkg install bind-tools
