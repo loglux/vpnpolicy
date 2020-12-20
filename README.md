@@ -96,7 +96,7 @@ chmod a+rx /jffs/scripts/openvpn-event
 It's possible to save up 20 rules in one nvram variable.
 This scrpts saves rules into first variable vpn_client_clientlist of possible six.
 It's planned in future to split rules by sets of 20 and save them into 6 nvram variables to get full capacity.
-Currently only up to 20 rules are possible.
+Currently only up to 20 rules per client are possible.
 
 The 'Description' field is limited to ten symbols, to save more space for rules. 
 The script automatically cut off all symbols that exceed this ten symbols limit.
