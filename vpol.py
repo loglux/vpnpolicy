@@ -10,8 +10,8 @@ class VPN_Rules():
         self.static_lines = []
         self.vpn_list = []
 
-    def domains(self):
-        lines = filter(None, open("domains.txt", "r").read().splitlines())
+    def domains(self, d_conf):
+        lines = filter(None, open(d_conf, "r").read().splitlines())
         for d in lines:
             results = pydig.query(d, 'A')
             results = [item.replace('\r', '') for item in results]
@@ -21,9 +21,9 @@ class VPN_Rules():
                 self.vpn_list.append(req)
         print(self.vpn_list)
 
-    def static(self):
+    def static(self, s_conf):
         try:
-            with open("static.csv", mode="r") as f:
+            with open(s_conf, mode="r") as f:
                 csv_lines = csv.reader(f)
                 for line in csv_lines:
                     if len(line) == 4:
@@ -63,10 +63,12 @@ class VPN_Rules():
 if __name__ == '__main__':
     local = "0.0.0.0" # your local subnet or network node
     client = 2 # 1,2,3,4 or 5
-    #configs = '/opt/home/vpnpolicy'
+    conf_path = ""
+    d_conf = conf_path + "domains.txt"
+    s_conf = conf_path + "static.csv"
     rules = VPN_Rules(local)
-    rules.domains()
-    rules.static()
+    rules.domains(d_conf)
+    rules.static(s_conf)
     rules.all_rules(client)
     rules.unset_nvram()
     rules.unset_nvram(client)
