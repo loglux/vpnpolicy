@@ -22,3 +22,6 @@ Some resources like online cinema theatres have not just more than 1 IP address 
 Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web History’. Here you can see domains are used by your computer or media player.
 
 
+## How to use the script
+lolcal - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 fur your entiere local network.
+client - A number of VPN Client. You have 5 client, so chose the relevanlt number
