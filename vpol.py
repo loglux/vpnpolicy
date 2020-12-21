@@ -29,6 +29,10 @@ class VPN_Rules():
                 csv_lines = csv.reader(f)
                 for line in csv_lines:
                     if len(line) == 4:
+                        if line[1].strip() == "0.0.0.0":
+                            line[1] = ""
+                        if line[2].strip() == "0.0.0.0":
+                            line[2] = ""
                         line = '<' + str(line[0]).strip()[:10] + '>' + str(line[1]).strip() + '>' + str(line[2]).strip() + '>' + str(line[3]).strip().upper()
                         self.static_lines.append(line)
             print(self.static_lines)
