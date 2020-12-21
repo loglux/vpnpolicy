@@ -4,7 +4,7 @@ import csv
 import os
 
 class VPN_Rules():
-    def __init__(self, local_ip="0.0.0.0"):
+    def __init__(self, local_ip):
         self.local_ip=local_ip
         self.pattern = """^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"""
         self.static_lines = []
@@ -16,6 +16,8 @@ class VPN_Rules():
             results = pydig.query(d, 'A')
             results = [item.replace('\r', '') for item in results]
             results = [x for x in results if re.match(self.pattern, x)]
+            if self.local_ip == "0.0.0.0":
+                self.local_ip = ""
             for r in results:
                 req = '<' + d[:10] + '>' + self.local_ip + '>' + r + '>VPN'
                 self.vpn_list.append(req)
@@ -62,7 +64,7 @@ class VPN_Rules():
         os.system(service_restart)
 
 if __name__ == '__main__':
-    local = "0.0.0.0" # your local subnet or network node
+    local = "" # your local subnet or network node
     client = 2 # 1,2,3,4 or 5
     conf_path = ""
     d_conf = conf_path + "domains.txt"
