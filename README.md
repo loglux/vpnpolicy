@@ -93,8 +93,9 @@ chmod a+rx /jffs/scripts/openvpn-event
 ```
 
 ## Known limitations
-It's not clear for now is it possible to save more than 20 rules. Nvram have 6 variables per client for that purpose. 
-It's planned to do further investigation. If wouldn't possible to split set of rules into 6 variable automatically, another one function could be created.
+NVRAM has 6 variables per client for storing VPN rules list. It was noticed that each variable could store up to 1024 symbols. However, the firmware split the list in chunks by 255 symbols. 255 * 6 = 1530. It very dubious that 100 rules can be stored in 1530 symbols. Another thing will be if we split by 1024 (1024 * 6 = 6144). Here 255 limit has been left, which can be changed in set_nvram() function, adjusting 'n =' variable. 
+
+In case if the list exceeds 1530 limit, it could be cut off at this point.  
 
 The 'Description' field is limited to ten symbols, to save more space for rules. 
 The script automatically cuts off all symbols that exceed this ten symbols limit.
