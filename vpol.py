@@ -54,9 +54,23 @@ class VPN_Rules():
             os.system(box)
 
     def set_nvram(self, seq=1):
-        self.vpn_list = "nvram set vpn_client" + str(seq) + "_clientlist=" + '"' + self.vpn_list + '"'
-        print(self.vpn_list)
-        os.system(self.vpn_list)
+        n = 255
+        chunks = [self.vpn_list[i:i + n] for i in range(0, len(self.vpn_list), n)]
+        all_lists = []
+        try:
+            all_lists = [{"list": "clientlist", "content": chunks[0]}]
+            all_lists = all_lists + [{"list": "clientlist1", "content": chunks[1]}]
+            all_lists = all_lists + [{"list": "clientlist2", "content": chunks[2]}]
+            all_lists = all_lists + [{"list": "clientlist3", "content": chunks[3]}]
+            all_lists = all_lists + [{"list": "clientlist4", "content": chunks[4]}]
+            all_lists = all_lists + [{"list": "clientlist5", "content": chunks[5]}]
+        except IndexError:
+            pass
+        for x in all_lists:
+            vpn_list = "nvram set vpn_client" + str(seq) + "_" + str(x["list"]) + "=" + '"' + str(
+                x["content"]) + '"'
+            print(vpn_list)
+            os.system(vpn_list)
 
     def nvram_commit(self):
         os.system("nvram commit")
@@ -82,39 +96,3 @@ if __name__ == '__main__':
     rules.unset_nvram()
     #rules.nvram_commit()
     #rules.client_restart(client)
-
-"""
-function split_clientlist(clientlist){
-var counter = 0;
-document.form.vpn_client_clientlist.value = clientlist.substring(counter, (counter+=255));
-document.form.vpn_client_clientlist1.value = clientlist.substring(counter, (counter+=255));
-document.form.vpn_client_clientlist2.value = clientlist.substring(counter, (counter+=255));
-document.form.vpn_client_clientlist3.value = clientlist.substring(counter, (counter+=255));
-document.form.vpn_client_clientlist4.value = clientlist.substring(counter, (counter+=255));
-document.form.vpn_client_clientlist5.value = clientlist.substring(counter, (counter+=255));
-}
-"""
-
-
-
-"""
-    def set_nvram(self, seq=1):
-        n = 255
-        chunks = [self.vpn_list[i:i + n] for i in range(0, len(self.vpn_list), n)]
-        all_lists = []
-        try:
-            all_lists = [{"list": "clientlist", "content": chunks[0]}]
-            all_lists = all_lists + [{"list": "clientlist1", "content": chunks[1]}]
-            all_lists = all_lists + [{"list": "clientlist2", "content": chunks[2]}]
-            all_lists = all_lists + [{"list": "clientlist3", "content": chunks[3]}]
-            all_lists = all_lists + [{"list": "clientlist4", "content": chunks[4]}]
-            all_lists = all_lists + [{"list": "clientlist5", "content": chunks[5]}]
-        except IndexError:
-            pass
-        for x in all_lists:
-            self_vpn_list = "nvram set vpn_client" + str(seq) + "_" + str(x["list"]) + "=" + '"' + str(
-                x["content"]) + '"'
-            print(self_vpn_list)
-            os.system(self.vpn_list)
-"""
-
