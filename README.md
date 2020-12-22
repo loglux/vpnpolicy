@@ -67,6 +67,17 @@ You can comment out rules.nvram_commit() if you don’t want to save your rules 
 and comment out in rules.client_restart(client) to prevent VPN client from restarting.
 
 ### Start
+
+You can download the scrpt in any way you think is conviniet.
+You can use git clone for this purpose.
+```
+opkg install git
+```
+And then download the script:
+```
+git clone https://github.com/loglux/vpnpolicy.git
+```
+
 The main library is stored in file vpol.py
 
 You can create a separate file for each client (client1.py, client2.py etc) if you have more than 1 client set up.
