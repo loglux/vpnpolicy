@@ -68,7 +68,7 @@ and comment out in rules.client_restart(client) to prevent VPN client from resta
 
 ### Start
 
-You can download the script in any way you think is convenient. You can use git clone for this purpose.
+You can download the script in any way you think is convenient. The best one is using 'git clone' for this purpose.
 ```
 opkg install git
 ```
