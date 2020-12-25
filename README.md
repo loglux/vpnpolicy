@@ -76,7 +76,7 @@ Use '@' symbol at the begining if you want to grab subnets (xxx.xxx.xxx.xxx/xx) 
 
 You can comment out 'rules.nvram_commit()' if you don’t want to save your rules in the router’s memory 
 
-and comment out in 'rules.client_restart(client)' to prevent VPN client from restarting.
+and comment out 'rules.client_restart(client)' to prevent VPN client from restarting.
 
 ### Start
 
