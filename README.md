@@ -54,6 +54,10 @@ pip install pydig
 ## How to use the script
 
 ### Set variables
+The main library is stored in file vpol.py
+
+You can create a separate file for each client (client1.py, client2.py etc) if you have more than 1 client set up.
+
 local - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
 
 client – a number of a VPN Client you’re using. You have five clients, so chose the relevant number.
@@ -65,7 +69,10 @@ You can also put an unique file names and path.
     d_conf = conf_path + "domains.txt"
     
     s_conf = conf_path + "static.csv"
-    
+
+You can comment out a domain using # symbol if you want to exclide them from the process.
+
+Use '@' symbol at the begining if you want to grab subnets for the domains (xxx.xxx.xxx.xxx/xx)
 
 You can comment out rules.nvram_commit() if you don’t want to save your rules in the router’s memory 
 
@@ -81,10 +88,6 @@ And then download the script:
 ```
 git clone https://github.com/loglux/vpnpolicy.git
 ```
-
-The main library is stored in file vpol.py
-
-You can create a separate file for each client (client1.py, client2.py etc) if you have more than 1 client set up.
 
 Execute the script 
 ```
