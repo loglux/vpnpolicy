@@ -31,17 +31,22 @@ Turn on ‘Web History’ option at the router’s page ‘Adaptive QoS – Web 
 opkg install bind-tools
 ```
 
-3. You need to install Python
+3. You need to install whois utility on your router
+```
+opkg install whois
+```
+
+4. You need to install Python
 ```
 opkg install python3
 ```
 
-4 You need to install python3-pip
+5 You need to install python3-pip
 ```
 opkg install python3-pip
 ```
 
-5 You need to install pydig module
+6 You need to install pydig module
 ```
 pip install pydig
 ```
