@@ -12,12 +12,12 @@ class VPN_Rules():
         self.cidr_regex  = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
 
     def domains(self, d_conf):
+        if self.local_ip == "0.0.0.0":
+            self.local_ip = ""
         lines = filter(None, open(d_conf, "r").read().splitlines())
         for line in lines:
             all_subs = []
             if not line.startswith('#'):
-                if self.local_ip == "0.0.0.0":
-                    self.local_ip = ""
                 d = line.replace('@', '').strip()
                 results = pydig.query(d, 'A')
                 results = [item.replace('\r', '') for item in results]
@@ -68,7 +68,7 @@ class VPN_Rules():
             set = "nvram unset "
             box = set + client + list + str(n)
             print(box)
-            os.system(box)
+            #os.system(box)
 
     def set_nvram(self, seq=1):
         n = 255
@@ -86,7 +86,7 @@ class VPN_Rules():
         for x in all_lists:
             vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
-            os.system(vpn_list)
+            #os.system(vpn_list)
 
     def nvram_commit(self):
         os.system("nvram commit")
