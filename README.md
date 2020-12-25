@@ -54,13 +54,13 @@ pip install pydig
 ## How to use the script
 
 ### Set variables
-The main library is stored in file vpol.py
+The main library is stored in file 'vpol.py'
 
-You can create a separate file for each client (client1.py, client2.py etc) if you have more than 1 client set up.
+You can create a separate file for each client ('client1.py', 'client2.py' etc) if you have more than 1 client set up.
 
-local - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
+'local' - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
 
-client – a number of a VPN Client you’re using. You have five clients, so chose the relevant number.
+'client' – a number of a VPN Client you’re using. You have five clients, so chose the relevant number.
 
 You can also put an unique file names and path. 
     
@@ -70,13 +70,13 @@ You can also put an unique file names and path.
     
     s_conf = conf_path + "static.csv"
 
-You can comment out a domain using # symbol if you want to exclide them from the process.
+You can comment out a domain using '#' symbol if you want to exclide them from the process.
 
-Use '@' symbol at the begining if you want to grab subnets for the domains (xxx.xxx.xxx.xxx/xx)
+Use '@' symbol at the begining if you want to grab subnets (xxx.xxx.xxx.xxx/xx) for the chosen domain. 
 
-You can comment out rules.nvram_commit() if you don’t want to save your rules in the router’s memory 
+You can comment out 'rules.nvram_commit()' if you don’t want to save your rules in the router’s memory 
 
-and comment out in rules.client_restart(client) to prevent VPN client from restarting.
+and comment out in 'rules.client_restart(client)' to prevent VPN client from restarting.
 
 ### Start
 
@@ -111,7 +111,8 @@ chmod a+rx /jffs/scripts/openvpn-event
 ```
 
 ## Known limitations
-NVRAM has 6 variables per client for storing VPN rules list. It was noticed that each variable could store up to 1024 symbols. However, the firmware split the list in chunks by 255 symbols. 255 * 6 = 1530. It very dubious that 100 rules can be stored in 1530 symbols. Another thing will be if we split by 1024 (1024 * 6 = 6144). For compatibility purpose, here 255 symbols limit has been left, which can be changed in set_nvram() function, adjusting 'n =' variable. 
+NVRAM has 6 variables per client for storing VPN rules list. It was noticed that each variable could store up to 1024 symbols. However, the firmware split the list in chunks by 255 symbols. 255 * 6 = 1530. It very dubious that 100 rules can be stored in 1530 symbols. Approximately 100 rules can be a summary of the rules of all 5 clients. 
+f course, it's done by FW designers to save space for NVRAM. For compatibility purpose, here 255 symbols limit has been left, which can be changed in set_nvram() function, adjusting 'n =' variable. Theoretically, it's possible to split a list of rules by 1024 symbols (1024 * 6 = 6144) but be aware of NVRAM capacity. 
 
 In case if the list exceeds 1530 limit, it will be cut off at this point. 
 
