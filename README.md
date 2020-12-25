@@ -62,7 +62,7 @@ You can create a separate file for each client ('client1.py', 'client2.py' etc) 
 
 'client' – a number of a VPN Client you’re using. You have five clients, so put the relevant number.
 
-You can also put a unique file names and path. 
+You can also put unique file names and path. 
     
     conf_path = ""
     
