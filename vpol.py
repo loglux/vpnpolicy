@@ -9,19 +9,37 @@ class VPN_Rules():
         self.pattern = """^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"""
         self.static_lines = []
         self.vpn_list = []
+        self.cidr_regex  = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
 
     def domains(self, d_conf):
         lines = filter(None, open(d_conf, "r").read().splitlines())
-        for d in lines:
-            results = pydig.query(d, 'A')
-            results = [item.replace('\r', '') for item in results]
-            results = [x for x in results if re.match(self.pattern, x)]
-            if self.local_ip == "0.0.0.0":
-                self.local_ip = ""
-            for r in results:
-                req = '<' + d[:10] + '>' + self.local_ip + '>' + r + '>VPN'
-                self.vpn_list.append(req)
-        print(self.vpn_list)
+        for line in lines:
+            all_subs = []
+            if not line.startswith('#'):
+                if self.local_ip == "0.0.0.0":
+                    self.local_ip = ""
+                d = line.replace('@', '').strip()
+                results = pydig.query(d, 'A')
+                results = [item.replace('\r', '') for item in results]
+                results = [x for x in results if re.match(self.pattern, x)]
+                print(f"{d} IP: {str(results)}")
+                if line.startswith('@'):
+                    subnets = []
+                    for ip in results:
+                        net = os.popen(f"whois {ip} | grep 'route\|CIDR'").read()
+                        result = re.findall(self.cidr_regex, net)
+                        subnets = subnets + result
+                    results = []
+                    [results.append(n) for n in subnets if n not in results]
+                    print(f"{d} Subnets: {results}")
+                    for s in results:
+                        subnet = f"<{d[:10]}>{self.local_ip}>{s}>VPN"
+                        all_subs.append(subnet)
+                else:
+                    for r in results:
+                        req = f"<{d[:10]}>{self.local_ip}>{r}>VPN"
+                        self.vpn_list.append(req)
+                self.vpn_list = self.vpn_list + all_subs
 
     def static(self, s_conf):
         try:
@@ -33,9 +51,8 @@ class VPN_Rules():
                             line[1] = ""
                         if line[2].strip() == "0.0.0.0":
                             line[2] = ""
-                        line = '<' + str(line[0]).strip()[:10] + '>' + str(line[1]).strip() + '>' + str(line[2]).strip() + '>' + str(line[3]).strip().upper()
+                        line = f'<{str(line[0]).strip()[:10]}>{str(line[1]).strip()}>{str(line[2]).strip()}>{str(line[3]).strip().upper()}'
                         self.static_lines.append(line)
-            print(self.static_lines)
         except FileNotFoundError:
             pass
 
@@ -51,7 +68,7 @@ class VPN_Rules():
             set = "nvram unset "
             box = set + client + list + str(n)
             print(box)
-            os.system(box)
+            #os.system(box)
 
     def set_nvram(self, seq=1):
         n = 255
@@ -67,10 +84,9 @@ class VPN_Rules():
         except IndexError:
             pass
         for x in all_lists:
-            vpn_list = "nvram set vpn_client" + str(seq) + "_" + str(x["list"]) + "=" + '"' + str(
-                x["content"]) + '"'
+            vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
-            os.system(vpn_list)
+            #os.system(vpn_list)
 
     def nvram_commit(self):
         os.system("nvram commit")
