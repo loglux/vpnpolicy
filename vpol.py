@@ -68,7 +68,7 @@ class VPN_Rules():
             set = "nvram unset "
             box = set + client + list + str(n)
             print(box)
-            #os.system(box)
+            os.system(box)
 
     def set_nvram(self, seq=1):
         n = 255
@@ -86,7 +86,7 @@ class VPN_Rules():
         for x in all_lists:
             vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
-            #os.system(vpn_list)
+            os.system(vpn_list)
 
     def nvram_commit(self):
         os.system("nvram commit")
