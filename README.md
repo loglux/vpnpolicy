@@ -60,7 +60,7 @@ You can create a separate file for each client ('client1.py', 'client2.py' etc) 
 
 'local' - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
 
-'client' – a number of a VPN Client you’re using. You have five clients, so chose the relevant number.
+'client' – a number of a VPN Client you’re using. You have five clients, so put the relevant number.
 
 You can also put an unique file names and path. 
     
