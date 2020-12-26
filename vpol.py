@@ -39,7 +39,8 @@ class VPN_Rules():
                     for r in results:
                         req = f"<{d[:10]}>{self.local_ip}>{r}>VPN"
                         self.vpn_list.append(req)
-                self.vpn_list = self.vpn_list + all_subs
+                self.vpn_list.extend(all_subs)
+                #self.vpn_list = self.vpn_list + all_subs
 
     def static(self, s_conf):
         try:
