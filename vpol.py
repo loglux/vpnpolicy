@@ -67,10 +67,10 @@ class VPNRules:
     @staticmethod
     def unset_nvram(num=''):
         for n in ['', 1, 2, 3, 4, 5]:
-            client = "vpn_client" + str(num)
+            vpn_client = "vpn_client" + str(num)
             clientlist = "_clientlist"
             nvram_set = "nvram unset "
-            box = nvram_set + client + clientlist + str(n)
+            box = nvram_set + vpn_client + clientlist + str(n)
             print(box)
             os.system(box)
 
