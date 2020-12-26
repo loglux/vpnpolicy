@@ -3,13 +3,15 @@ import re
 import csv
 import os
 
-class VPN_Rules():
+
+class VPNRules:
     def __init__(self, local_ip):
-        self.local_ip=local_ip
-        self.pattern = """^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"""
+        self.local_ip = local_ip
+        self.pattern = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
+                       "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
         self.static_lines = []
         self.vpn_list = []
-        self.cidr_regex  = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
+        self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
 
     def domains(self, d_conf):
         if self.local_ip == "0.0.0.0":
@@ -40,7 +42,6 @@ class VPN_Rules():
                         req = f"<{d[:10]}>{self.local_ip}>{r}>VPN"
                         self.vpn_list.append(req)
                 self.vpn_list.extend(all_subs)
-                #self.vpn_list = self.vpn_list + all_subs
 
     def static(self, s_conf):
         try:
@@ -52,22 +53,24 @@ class VPN_Rules():
                             line[1] = ""
                         if line[2].strip() == "0.0.0.0":
                             line[2] = ""
-                        line = f'<{str(line[0]).strip()[:10]}>{str(line[1]).strip()}>{str(line[2]).strip()}>{str(line[3]).strip().upper()}'
+                        line = f'<{str(line[0]).strip()[:10]}>{str(line[1]).strip()}>{str(line[2]).strip()}' \
+                               f'>{str(line[3]).strip().upper()}'
                         self.static_lines.append(line)
         except FileNotFoundError:
             pass
 
     def all_rules(self):
         if self.static_lines:
-            self.vpn_list = self.vpn_list + self.static_lines
+            self.vpn_list.extend(self.static_lines)
         self.vpn_list = ''.join(self.vpn_list)
 
-    def unset_nvram(self, num=''):
+    @staticmethod
+    def unset_nvram(num=''):
         for n in ['', 1, 2, 3, 4, 5]:
             client = "vpn_client" + str(num)
-            list = "_clientlist"
-            set = "nvram unset "
-            box = set + client + list + str(n)
+            clientlist = "_clientlist"
+            nvram_set = "nvram unset "
+            box = nvram_set + client + clientlist + str(n)
             print(box)
             os.system(box)
 
@@ -89,21 +92,25 @@ class VPN_Rules():
             print(vpn_list)
             os.system(vpn_list)
 
-    def nvram_commit(self):
+    @staticmethod
+    def nvram_commit():
+        # print("nvram commit")
         os.system("nvram commit")
 
-    def client_restart(self, clnum=1):
+    @staticmethod
+    def client_restart(clnum=1):
         service_restart = "service restart_client" + str(clnum)
-        print(service_restart)
+        # print(service_restart)
         os.system(service_restart)
 
+
 if __name__ == '__main__':
-    local = "" # your local subnet or network node
-    client = 2 # 1,2,3,4 or 5
+    local = ""  # your local subnet or network node
+    client = 2  # 1,2,3,4 or 5
     conf_path = ""
     d_conf = conf_path + "domains.txt"
     s_conf = conf_path + "static.csv"
-    rules = VPN_Rules(local)
+    rules = VPNRules(local)
     rules.domains(d_conf)
     rules.static(s_conf)
     rules.all_rules()
