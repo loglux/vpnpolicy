@@ -1,4 +1,4 @@
-# vpnpolicy (VPN Policy Rule Routing for AsusWRT Merlin)
+# Creating VPN Routing Rules for AsusWRT Merlin OpenVPN Client
 
 ## What does that script do?
 This script creates VPN Policy rules for OpenVPN client in AsusWRT Merlin Firmware. It helps to obtain IP addresses that belong to the domains and save it in the router’s configuration. It also takes a new list of IP addresses, so you can use this script regularly, to keep the list of IPs fresh.
