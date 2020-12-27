@@ -9,7 +9,6 @@ class VPNRules:
         self.local_ip = local_ip
         self.pattern = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
                        "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
-        self.static_lines = []
         self.vpn_list = []
         self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
         self.format_rule = "<{}>{}>{}>{}"
@@ -56,13 +55,11 @@ class VPNRules:
                                                        str(line[1]).strip(),
                                                        str(line[2]).strip(),
                                                        str(line[3]).strip().upper())
-                        self.static_lines.append(line)
+                        self.vpn_list.append(line)
         except FileNotFoundError:
             pass
 
     def all_rules(self):
-        if self.static_lines:
-            self.vpn_list.extend(self.static_lines)
         self.vpn_list = ''.join(self.vpn_list)
 
     @staticmethod
