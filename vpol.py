@@ -12,6 +12,7 @@ class VPNRules:
         self.static_lines = []
         self.vpn_list = []
         self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
+        self.format_rule = "<{}>{}>{}>{}"
 
     def domains(self, d_conf):
         if self.local_ip == "0.0.0.0":
@@ -35,11 +36,11 @@ class VPNRules:
                     [results.append(n) for n in subnets if n not in results]
                     print(f"{d} Subnets: {results}")
                     for s in results:
-                        subnet = f"<{d[:10]}>{self.local_ip}>{s}>VPN"
+                        subnet = self.format_rule.format(d[:10], self.local_ip, s, "VPN")
                         all_subs.append(subnet)
                 else:
                     for r in results:
-                        req = f"<{d[:10]}>{self.local_ip}>{r}>VPN"
+                        req = self.format_rule.format(d[:10], self.local_ip, r, "VPN")
                         self.vpn_list.append(req)
                 self.vpn_list.extend(all_subs)
 
@@ -53,8 +54,10 @@ class VPNRules:
                             line[1] = ""
                         if line[2].strip() == "0.0.0.0":
                             line[2] = ""
-                        line = f'<{str(line[0]).strip()[:10]}>{str(line[1]).strip()}>{str(line[2]).strip()}' \
-                               f'>{str(line[3]).strip().upper()}'
+                        line = self.format_rule.format(str(line[0]).strip()[:10],
+                                                       str(line[1]).strip(),
+                                                       str(line[2]).strip(),
+                                                       str(line[3]).strip().upper())
                         self.static_lines.append(line)
         except FileNotFoundError:
             pass
@@ -69,7 +72,7 @@ class VPNRules:
         for n in ['', 1, 2, 3, 4, 5]:
             box = f"nvram_unset vpn_client{str(num)}_clientlist{str(n)}"
             print(box)
-            os.system(box)
+            #os.system(box)
 
     def set_nvram(self, seq=1):
         n = 255
@@ -87,7 +90,7 @@ class VPNRules:
         for x in all_lists:
             vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
-            os.system(vpn_list)
+            #os.system(vpn_list)
 
     @staticmethod
     def nvram_commit():
