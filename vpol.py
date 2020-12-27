@@ -30,7 +30,7 @@ class VPNRules:
                     for ip in results:
                         net = os.popen(f"whois {ip} | grep 'route\|CIDR'").read()
                         result = re.findall(self.cidr_regex, net)
-                        subnets = subnets + result
+                        subnets.extend(result)
                     results = []
                     [results.append(n) for n in subnets if n not in results]
                     print(f"{d} Subnets: {results}")
@@ -69,7 +69,7 @@ class VPNRules:
         for n in ['', 1, 2, 3, 4, 5]:
             box = f"nvram_unset vpn_client{str(num)}_clientlist{str(n)}"
             print(box)
-            os.system(box)
+            #os.system(box)
 
     def set_nvram(self, seq=1):
         n = 255
@@ -87,7 +87,7 @@ class VPNRules:
         for x in all_lists:
             vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
-            os.system(vpn_list)
+            #os.system(vpn_list)
 
     @staticmethod
     def nvram_commit():
@@ -115,5 +115,5 @@ if __name__ == '__main__':
     rules.unset_nvram(client)
     rules.set_nvram(client)
     rules.unset_nvram()
-    #rules.nvram_commit()
-    #rules.client_restart(client)
+    # rules.nvram_commit()
+    # rules.client_restart(client)
