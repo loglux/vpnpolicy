@@ -59,7 +59,9 @@ class VPNRules:
         except FileNotFoundError:
             pass
 
-    def all_rules(self):
+    def all_rules(self, d_conf, s_conf):
+        self.domains(d_conf)
+        self.static(s_conf)
         self.vpn_list = ''.join(self.vpn_list)
 
     @staticmethod
@@ -106,9 +108,7 @@ if __name__ == '__main__':
     d_conf = conf_path + "domains.txt"
     s_conf = conf_path + "static.csv"
     rules = VPNRules(local)
-    rules.domains(d_conf)
-    rules.static(s_conf)
-    rules.all_rules()
+    rules.all_rules(d_conf, s_conf)
     rules.unset_nvram()
     rules.unset_nvram(client)
     rules.set_nvram(client)
