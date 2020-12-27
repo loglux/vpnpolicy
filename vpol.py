@@ -7,10 +7,10 @@ import os
 class VPNRules:
     def __init__(self, local_ip):
         self.local_ip = local_ip
-        self.pattern = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
+        self.ip_regex = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
                        "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
-        self.vpn_list = []
         self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
+        self.vpn_list = []
         self.format_rule = "<{}>{}>{}>{}"
 
     def domains(self, d_conf):
@@ -22,7 +22,7 @@ class VPNRules:
                 d = line.replace('@', '').strip()
                 results = pydig.query(d, 'A')
                 results = [item.replace('\r', '') for item in results]
-                results = [x for x in results if re.match(self.pattern, x)]
+                results = [x for x in results if re.match(self.ip_regex, x)]
                 print(f"{d} IP: {str(results)}")
                 if line.startswith('@'):
                     subnets = []
