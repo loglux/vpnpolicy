@@ -30,16 +30,16 @@ class VPNRules:
                         net = os.popen(f"whois {ip} | grep 'route\|CIDR'").read()
                         result = re.findall(self.cidr_regex, net)
                         subnets.extend(result)
-                    results = []
-                    [results.append(n) for n in subnets if n not in results]
-                    print(f"{d} Subnets: {results}")
-                    for s in results:
+                    unique_subnets = []
+                    [unique_subnets.append(n) for n in subnets if n not in unique_subnets]
+                    print(f"{d} Subnets: {unique_subnets}")
+                    for s in unique_subnets:
                         subnet = self.format_rule.format(d[:10], self.local_ip, s, "VPN")
                         self.vpn_list.append(subnet)
                 else:
                     for r in results:
-                        req = self.format_rule.format(d[:10], self.local_ip, r, "VPN")
-                        self.vpn_list.append(req)
+                        ip_address = self.format_rule.format(d[:10], self.local_ip, r, "VPN")
+                        self.vpn_list.append(ip_address)
 
     def static(self, s_conf):
         try:
