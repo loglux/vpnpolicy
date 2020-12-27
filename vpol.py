@@ -19,7 +19,6 @@ class VPNRules:
             self.local_ip = ""
         lines = filter(None, open(d_conf, "r").read().splitlines())
         for line in lines:
-            all_subs = []
             if not line.startswith('#'):
                 d = line.replace('@', '').strip()
                 results = pydig.query(d, 'A')
@@ -37,12 +36,11 @@ class VPNRules:
                     print(f"{d} Subnets: {results}")
                     for s in results:
                         subnet = self.format_rule.format(d[:10], self.local_ip, s, "VPN")
-                        all_subs.append(subnet)
+                        self.vpn_list.append(subnet)
                 else:
                     for r in results:
                         req = self.format_rule.format(d[:10], self.local_ip, r, "VPN")
                         self.vpn_list.append(req)
-                self.vpn_list.extend(all_subs)
 
     def static(self, s_conf):
         try:
