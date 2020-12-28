@@ -66,13 +66,13 @@ class VPNRules:
         self.vpn_list = ''.join(self.vpn_list)
 
     @staticmethod
-    def unset_nvram(num=''):
+    def unset_nvram(client=''):
         for n in ['', 1, 2, 3, 4, 5]:
-            box = f"nvram unset vpn_client{str(num)}_clientlist{str(n)}"
+            box = f"nvram unset vpn_client{str(client)}_clientlist{str(n)}"
             print(box)
             os.system(box)
 
-    def set_nvram(self, seq=1):
+    def set_nvram(self, client=1):
         n = 255
         chunks = [self.vpn_list[i:i + n] for i in range(0, len(self.vpn_list), n)]
         all_lists = []
@@ -86,7 +86,7 @@ class VPNRules:
         except IndexError:
             pass
         for x in all_lists:
-            vpn_list = f'nvram set vpn_client{str(seq)}_{str(x["list"])}="{str(x["content"])}"'
+            vpn_list = f'nvram set vpn_client{str(client)}_{str(x["list"])}="{str(x["content"])}"'
             print(vpn_list)
             os.system(vpn_list)
 
@@ -96,8 +96,8 @@ class VPNRules:
         os.system("nvram commit")
 
     @staticmethod
-    def client_restart(clnum=1):
-        service_restart = "service restart_client" + str(clnum)
+    def client_restart(client=1):
+        service_restart = "service restart_client" + str(client)
         # print(service_restart)
         os.system(service_restart)
 
