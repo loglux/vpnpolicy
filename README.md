@@ -60,6 +60,8 @@ You can create a separate file for each client ('client1.py', 'client2.py' etc) 
 
 'local' - IP address or set of addresses (192.168.0.10, 192.168.0.0/24 or just 0.0.0.0 for your entire local network.
 
+'name_length' - A limit on domain names. By default 10 symbols are set up to save NVRAM space. If you don't have many rules, you can increase this limit. But remember some domain names can be very long.
+
 'client' – a number of a VPN Client you’re using. You have five clients, so put the relevant number.
 
 You can also put unique file names and path. 
@@ -117,7 +119,7 @@ It's done by FW designers to save space in NVRAM. For compatibility purpose, her
 In case if the list exceeds 1530 limit, it will be cut off at this point. 
 
 The 'Description' field is limited to ten symbols, to save more space for rules. 
-The script automatically cuts off all symbols that exceed this ten symbols limit.
+The script automatically cuts off all symbols that exceed this ten symbols limit. You can increase this limit changing 'name_length' parameter.
 
 ## Useful references:
 https://github.com/RMerl/asuswrt-merlin.ng/wiki/Policy-based-routing
