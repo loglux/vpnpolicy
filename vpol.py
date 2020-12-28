@@ -5,13 +5,14 @@ import os
 
 
 class VPNRules:
-    def __init__(self, local_ip):
+    def __init__(self, local_ip, name_length=10):
         self.local_ip = local_ip
         self.ip_regex = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
-                       "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
+                        "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
         self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
         self.vpn_list = []
         self.format_rule = "<{}>{}>{}>{}"
+        self.name_length = name_length
 
     def domains(self, d_conf):
         if self.local_ip == "0.0.0.0":
@@ -34,11 +35,11 @@ class VPNRules:
                     [unique_subnets.append(n) for n in subnets if n not in unique_subnets]
                     print(f"{d} Subnets: {unique_subnets}")
                     for s in unique_subnets:
-                        subnet = self.format_rule.format(d[:10], self.local_ip, s, "VPN")
+                        subnet = self.format_rule.format(d[:self.name_length], self.local_ip, s, "VPN")
                         self.vpn_list.append(subnet)
                 else:
                     for r in results:
-                        ip_address = self.format_rule.format(d[:10], self.local_ip, r, "VPN")
+                        ip_address = self.format_rule.format(d[:self.name_length], self.local_ip, r, "VPN")
                         self.vpn_list.append(ip_address)
 
     def static(self, s_conf):
@@ -51,7 +52,7 @@ class VPNRules:
                             line[1] = ""
                         if line[2].strip() == "0.0.0.0":
                             line[2] = ""
-                        line = self.format_rule.format(str(line[0]).strip()[:10],
+                        line = self.format_rule.format(str(line[0]).strip()[:self.name_length],
                                                        str(line[1]).strip(),
                                                        str(line[2]).strip(),
                                                        str(line[3]).strip().upper())
@@ -103,11 +104,12 @@ class VPNRules:
 
 if __name__ == '__main__':
     local = ""  # your local subnet or network node
+    name_lenth = 20
     client = 2  # 1,2,3,4 or 5
     conf_path = ""
     d_conf = conf_path + "domains.txt"
     s_conf = conf_path + "static.csv"
-    rules = VPNRules(local)
+    rules = VPNRules(local, name_lenth)
     rules.all_rules(d_conf, s_conf)
     rules.unset_nvram()
     rules.unset_nvram(client)
