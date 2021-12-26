@@ -5,14 +5,19 @@ import os
 
 
 class VPNRules:
-    def __init__(self, local_ip, name_length=10):
+    def __init__(self, local_ip="", name_length=20, client=1):
         self.local_ip = local_ip
         self.ip_regex = "^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[" \
                         "0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$"
         self.cidr_regex = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?:/\d{1,2}|)'
         self.vpn_list = []
-        self.format_rule = "<{}>{}>{}>{}"
+        self.client = client
+        self.format_rule = "<{}>{}>{}>{}>{}"
+        self.interface = "OVPN{}".format(str(self.client))
         self.name_length = name_length
+        # self.rule_list = "/jffs/openvpn/vpndirector_rulelist"
+        self.rule_list = "vpndirector_rulelist"
+        # print(self.intereface)
 
     def domains(self, d_conf):
         if self.local_ip == "0.0.0.0":
@@ -35,11 +40,11 @@ class VPNRules:
                     [unique_subnets.append(n) for n in subnets if n not in unique_subnets]
                     print(f"{d} Subnets: {unique_subnets}")
                     for s in unique_subnets:
-                        subnet = self.format_rule.format(d[:self.name_length], self.local_ip, s, "VPN")
+                        subnet = self.format_rule.format(1, d[:self.name_length], self.local_ip, s, self.interface)
                         self.vpn_list.append(subnet)
                 else:
                     for r in results:
-                        ip_address = self.format_rule.format(d[:self.name_length], self.local_ip, r, "VPN")
+                        ip_address = self.format_rule.format(1, d[:self.name_length], self.local_ip, r, self.interface)
                         self.vpn_list.append(ip_address)
 
     def static(self, s_conf):
@@ -48,72 +53,92 @@ class VPNRules:
                 csv_lines = csv.reader(f)
                 for line in csv_lines:
                     if len(line) == 4:
-                        if line[1].strip() == "0.0.0.0":
-                            line[1] = ""
-                        if line[2].strip() == "0.0.0.0":
-                            line[2] = ""
-                        line = self.format_rule.format(str(line[0]).strip()[:self.name_length],
-                                                       str(line[1]).strip(),
-                                                       str(line[2]).strip(),
-                                                       str(line[3]).strip().upper())
-                        self.vpn_list.append(line)
+                        enable = 1
+                        name = 0
+                        lan = 1
+                        wan = 2
+                        interface = 3
+                    elif len(line) == 5:
+                        if line[0] == 0 or 1:
+                            enable = line[0]
+                        else:
+                            enable = 1
+                        name = 1
+                        lan = 2
+                        wan = 3
+                        interface = 4
+                    if line[lan].strip() == "0.0.0.0":
+                        line[lan] = ""
+                    if line[wan].strip() == "0.0.0.0":
+                        line[wan] = ""
+                    line = self.format_rule.format(enable,
+                        str(line[name]).strip()[:self.name_length],
+                                                   str(line[lan]).strip(),
+                                                   str(line[wan]).strip(),
+                                                   str(line[interface]).strip().upper() + str(self.client))
+                    self.vpn_list.append(line)
         except FileNotFoundError:
             pass
 
-    def all_rules(self, d_conf, s_conf):
+    def all_rules(self, d_conf="domains.txt", s_conf="static.csv"):
         self.domains(d_conf)
         self.static(s_conf)
         self.vpn_list = ''.join(self.vpn_list)
 
-    @staticmethod
-    def unset_nvram(client=''):
-        for n in ['', 1, 2, 3, 4, 5]:
-            box = f"nvram unset vpn_client{str(client)}_clientlist{str(n)}"
-            print(box)
-            os.system(box)
+    # Not sure is it needed at all
+    def save_rules(self):
+        with open('vpndirector_rulelist.txt', 'w') as f:
+            f.writelines(self.vpn_list)
 
-    def set_nvram(self, client=1):
-        n = 255
-        chunks = [self.vpn_list[i:i + n] for i in range(0, len(self.vpn_list), n)]
-        all_lists = []
+    def create_rules(self):
         try:
-            all_lists = [{"list": "clientlist", "content": chunks[0]}]
-            all_lists = all_lists + [{"list": "clientlist1", "content": chunks[1]}]
-            all_lists = all_lists + [{"list": "clientlist2", "content": chunks[2]}]
-            all_lists = all_lists + [{"list": "clientlist3", "content": chunks[3]}]
-            all_lists = all_lists + [{"list": "clientlist4", "content": chunks[4]}]
-            all_lists = all_lists + [{"list": "clientlist5", "content": chunks[5]}]
-        except IndexError:
+            with open(self.rule_list, mode="r+") as f:
+                rules = f.read()
+                # print(rules)
+                int_pattern = "<[1,0]>[a-zA-Z.0-9-]*>({})?>({})?>OVPN{}"\
+                    .format(self.cidr_regex, self.cidr_regex, self.client)
+                # print(int_pattern)
+                updated_rules = re.sub(int_pattern, '', rules)
+                # print(updated_rules)
+                self.vpn_list = self.vpn_list + updated_rules
+                # print(self.vpn_list)
+        except FileNotFoundError:
+            print("Creating a new vpndirector_" + "rulelist file...")
             pass
-        for x in all_lists:
-            vpn_list = f'nvram set vpn_client{str(client)}_{str(x["list"])}="{str(x["content"])}"'
-            print(vpn_list)
-            os.system(vpn_list)
+        with open(self.rule_list, mode="w") as f:
+            f.write(self.vpn_list)
 
-    @staticmethod
-    def nvram_commit():
-        # print("nvram commit")
-        os.system("nvram commit")
+    def clear_all(self):
+        try:
+            with open(self.rule_list, mode="r+") as f:
+                f.truncate(0)
+        except FileNotFoundError:
+            pass
 
-    @staticmethod
-    def client_restart(client=1):
-        service_restart = "service restart_client" + str(client)
-        # print(service_restart)
+    def client_restart(self):
+        service_restart = "service restart_vpnclient" + str(self.client)
+        print(service_restart)
         os.system(service_restart)
 
-
 if __name__ == '__main__':
-    local = ""  # your local subnet or network node
-    name_lenth = 20
-    client = 2  # 1,2,3,4 or 5
+    client = 2  # a client's number (from 1 to 5)
+    # your local subnet or network node, you can leave it black for entire LAN
+    # local = ""
+    # name_length = 20
+    # local= "" and name_lenght=20 by default
+    # you can rewrite name_length, and local
+    # rules = VPNRules(local, name_length, client)
+    rules = VPNRules(client=client)
     conf_path = ""
     d_conf = conf_path + "domains.txt"
     s_conf = conf_path + "static.csv"
-    rules = VPNRules(local, name_lenth)
     rules.all_rules(d_conf, s_conf)
-    rules.unset_nvram()
-    rules.unset_nvram(client)
-    rules.set_nvram(client)
-    rules.unset_nvram()
-    # rules.nvram_commit()
-    # rules.client_restart(client)
+    # conf_path, d_conf and s_cpnf are not compulsory,
+    # especially, if you put these files into the same directory
+    # domains.txt and static.cvs are used by default,
+    # so you can use this method without arguments:
+    # rules.all_rules()
+    rules.create_rules()
+    rules.client_restart()
+
+

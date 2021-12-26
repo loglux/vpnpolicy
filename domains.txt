@@ -1,5 +1,34 @@
+# IVI
 ivi.ru
-tvzavr.ru
-tvigle.ru
-amediateka.ru
-netfix.com
+#ivi-vod-world.gcdn.co
+#api.vigo.ru
+api.ivi.ru
+#www.tns-counter.ru
+thumbs.dfs.ivi.ru
+@parent7.dfs.ivi.ru
+@dfs-m9-6.dfs.ivi.ru
+#@speedtest.net
+#@msftconnecttest.com
+#dtln-msk-ix.cdn.ivi.ru
+top-twz1.mail.ru
+# MEGOGO
+@et.megogo.net
+#@meta.vcdn.biz
+#@vs47.vcdn.biz
+#@interactive.megogo.net
+#@edge-interactive.megogo.net
+#@api-interactive.megogo.net
+@s1.vcdn.biz
+#s2.vcdn.biz
+#s8.vcdn.biz
+#s5.vcdn.biz
+#s6.vcdn.biz
+#s4.vcdn.biz
+#s7.vcdn.biz
+#s9.vcdn.biz
+#s3.vcdn.biz
+@megogo.net
+@megogo.ru
+# TVZAVR
+@www.tvzavr.ru
+@services.tvzavr.ru
