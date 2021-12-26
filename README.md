@@ -1,6 +1,6 @@
 # VPN Routing Rules creating tool for AsusWRT Merlin OpenVPN Client
 
-### Since version 386.3 vpn rules moved from nvram to a file. The new version of this script is commung up, which working prototype is ready and be finished and published soon. It will replace the current version, so in future, if you need a script for FW before 386.3, you should use the release 2.07. 
+### Since version 386.3 vpn rules moved from nvram to a file. The new version of this script does not work with previous FW versions, so if you need a script for FW before 386.3, you should use the release 2.07. 
 
 ## What does that script do?
 This script creates VPN Policy rules for OpenVPN client in AsusWRT Merlin Firmware. It helps to obtain IP addresses that belong to the domains and save it in the router’s configuration. It also takes a new list of IP addresses, so you can use this script regularly, to keep the list of IPs fresh.
