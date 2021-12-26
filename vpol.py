@@ -15,8 +15,8 @@ class VPNRules:
         self.format_rule = "<{}>{}>{}>{}>{}"
         self.interface = "OVPN{}".format(str(self.client))
         self.name_length = name_length
-        # self.rule_list = "/jffs/openvpn/vpndirector_rulelist"
-        self.rule_list = "vpndirector_rulelist"
+        self.rule_list = "/jffs/openvpn/vpndirector_rulelist"
+        #self.rule_list = "vpndirector_rulelist"
         # print(self.intereface)
 
     def domains(self, d_conf):
